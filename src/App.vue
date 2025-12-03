@@ -1,15 +1,15 @@
 <template>
-  <div>
-    <svg>
-      <use xlink:href="#icon-xiaoxi"></use>
-    </svg>
-  </div>
+  <router-view></router-view>
 </template>
 
-<script setup lang='ts'>
-
+<script setup>
+import { onMounted } from 'vue'
+import { reqLogin } from './api/user';
+onMounted(()=>{
+ reqLogin({username:'admin', password:'111111'})
+})
 </script>
 
-<style scoped>
+<style>
 
 </style>

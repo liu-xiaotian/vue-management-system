@@ -2,10 +2,11 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import path from 'path'
-
+import { viteMockServe } from 'vite-plugin-mock'
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [
+export default defineConfig(({ command })=> {
+  return{
+    plugins: [
     vue(),
     createSvgIconsPlugin({
       // Specify the icon folder to be cached
@@ -13,10 +14,23 @@ export default defineConfig({
       // Specify symbolId format
       symbolId: 'icon-[dir]-[name]',
     }),
+    viteMockServe({
+        localEnabled: command === 'serve',
+    }),
   ],
-  resolve:{
+  resolve: {
     alias: {
-      "@": path.resolve("./src") // 相对路径别名配置，使用 @ 代替 src
-  }
+      '@': path.resolve('./src'), // 相对路径别名配置，使用 @ 代替 src
+    },
+  },
+  //scss全局变量配置
+  css: {
+    preprocessorOptions: {
+      scss: {
+        javascriptEnabled: true,
+        additionalData: '@use "@/styles/variable.scss" ;',
+      },
+    },
+  },
   }
 })
